@@ -1,0 +1,17 @@
+@import 'bourbon';
+@import 'base/base';
+@import 'neat';
+
+@import 'flashes';
+
+.button {
+  @extend button;
+}
+.group {
+  display: inline-block;
+  margin: 1em;
+}
+
+.wrapper {
+  @include outer-container;
+}

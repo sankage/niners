@@ -53,4 +53,9 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  
+  root "players#new"
+  resources :players, only: [:new, :create, :index, :destroy] do
+    get 'regroup', on: :collection
+  end
 end
