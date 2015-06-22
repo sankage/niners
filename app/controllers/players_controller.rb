@@ -1,4 +1,8 @@
 class PlayersController < ApplicationController
+  http_basic_authenticate_with name: Rails.application.secrets.username,
+                           password: Rails.application.secrets.password,
+                               only: [:index, :destroy, :regroup]
+
   def new
     @player = Player.new
   end
