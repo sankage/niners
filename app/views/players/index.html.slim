@@ -1,21 +1,24 @@
 h1 Players
 
-ul
-  li #{@players.size} groups have been made.
-  li #{@grouped_players} players have been placed into groups this week.
-  - if @ungrouped_players > 0
-    li #{@ungrouped_players} players have not been put into groups. Hit the
-       Re-Group button for them to be added.
+- if @players
+  ul
+    li #{@players.size} groups have been made.
+    li #{@grouped_players} players have been placed into groups this week.
+    - if @ungrouped_players > 0
+      li #{@ungrouped_players} players have not been put into groups. Hit the
+        Re-Group button for them to be added.
 
-ol.groups
-  - @players.each_with_index do |group, index|
-    li.group
-      h2 Group ##{index+1}
-      ul
-        - group.each do |player|
-          li.player
-            | #{player.name}—#{player.type}
-            | &nbsp;
-            = link_to "✖", player_path(player), method: :delete, data: { confirm: "Are you sure?" }
+  ol.groups
+    - @players.each_with_index do |group, index|
+      li.group
+        h2 Group ##{index+1}
+        ul
+          - group.each do |player|
+            li.player
+              | #{player.name}—#{player.type}
+              | &nbsp;
+              = link_to "✖", player_path(player), method: :delete, data: { confirm: "Are you sure?" }
 
-= link_to "Re-Group", regroup_players_path, class: "button"
+  = link_to "Re-Group", regroup_players_path, class: "button"
+- else
+  p No players have registered yet.
