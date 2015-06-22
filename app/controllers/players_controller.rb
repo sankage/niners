@@ -20,7 +20,7 @@ class PlayersController < ApplicationController
 
   def index
     @players = Player.groupings
-    @grouped_players = @players.map { |p| p.size }.reduce(:+)
+    @grouped_players = @players.map { |p| p.size }.reduce(0, :+)
     @ungrouped_players = Player.recent.count - @grouped_players
   end
 

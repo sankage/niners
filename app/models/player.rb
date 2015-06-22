@@ -1,4 +1,7 @@
 class Player < ActiveRecord::Base
+
+  class GroupError < StandardError; end
+
   scope :recent, -> { where("created_at >= ?", 6.days.ago) }
   scope :semi_recent, -> { where("created_at >= ?", 12.days.ago) }
 
@@ -16,9 +19,12 @@ class Player < ActiveRecord::Base
     else
       make_groups
     end
+  rescue GroupError
+    make_groups
   end
 
   def self.make_groups
+    return [] if recent.count == 0
     groups = recent.to_a.shuffle.each_slice(4).to_a
     if groups.last.size == 2
       groups = groups + groups.pop(2).flatten.each_slice(3).to_a
@@ -36,7 +42,12 @@ class Player < ActiveRecord::Base
 
   def self.deserialize_groups(id_array)
     players = Player.semi_recent
-    id_array.map { |group| group.map { |pid| players.detect { |p| p.id == pid } } }
+    force_regroup = -> { raise GroupError }
+    id_array.map { |group|
+      group.map { |pid|
+        players.detect(force_regroup) { |p| p.id == pid }
+      }
+    }
   end
 
   validates :name, presence: true
