@@ -33,7 +33,7 @@ class Player < ActiveRecord::Base
 
   def self.make_groups
     return [] if recent.count == 0
-    groups = recent.to_a.shuffle.each_slice(4).to_a
+    groups = patterned_groups.each_slice(4).to_a
     if groups.last.size == 2
       groups = groups + groups.pop(2).flatten.each_slice(3).to_a
     elsif groups.last.size == 1
@@ -41,6 +41,25 @@ class Player < ActiveRecord::Base
     end
     serialize_and_store(groups)
     groups
+  end
+
+  def self.patterned_groups
+    walkers = recent.where(walker: true, rider: false).to_a.shuffle.each_slice(2).to_a
+    riders = recent.where(walker: false, rider: true).to_a.shuffle.each_slice(2).to_a
+    either = recent.where(walker: false, rider: false).to_a.shuffle.each_slice(2).to_a
+    either += recent.where(walker: true, rider: true).to_a.shuffle.each_slice(2).to_a
+    remainders = []
+    if walkers.last.size == 1
+      remainders.push walkers.pop
+    end
+    if riders.last.size == 1
+      remainders.push riders.pop
+    end
+    if walkers.size >= riders.size
+      (walkers.zip(riders) + remainders + either).flatten.compact
+    else
+      (riders.zip(walkers) + remainders + either).flatten.compact
+    end
   end
 
   def self.serialize_and_store(groups)
