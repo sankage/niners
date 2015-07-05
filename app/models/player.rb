@@ -2,8 +2,19 @@ class Player < ActiveRecord::Base
 
   class GroupError < StandardError; end
 
-  scope :recent, -> { where("created_at >= ?", 6.days.ago) }
+  scope :recent, -> {
+    where("created_at >= ?", last_tuesday)
+  }
   scope :semi_recent, -> { where("created_at >= ?", 12.days.ago) }
+
+  def self.last_tuesday
+    today = Time.now
+    diff = ((today.wday + 5) % 7)
+    if diff == 0 && today.at_noon < today
+      diff = 7
+    end
+    (today - diff.days).at_noon
+  end
 
   def self.groupings(force: false)
     if force
@@ -11,10 +22,7 @@ class Player < ActiveRecord::Base
     else
       last_entry = History.last || OpenStruct.new(created_at: Date.new(2000,1,1))
     end
-    # TODO: what happens if an admin makes a group prematurely and you have late
-    # registers? a possible idea is to make this method take an optional param
-    # to "force" a new grouping
-    if last_entry.created_at >= 6.days.ago
+    if last_entry.created_at >= last_tuesday
       deserialize_groups(last_entry.serialized_groups)
     else
       make_groups
