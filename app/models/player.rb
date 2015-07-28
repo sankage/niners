@@ -49,10 +49,10 @@ class Player < ActiveRecord::Base
     either = recent.where(walker: false, rider: false).to_a.shuffle.each_slice(2).to_a
     either += recent.where(walker: true, rider: true).to_a.shuffle.each_slice(2).to_a
     remainders = []
-    if walkers.last.size == 1
+    if walkers.last && walkers.last.size == 1
       remainders.push walkers.pop
     end
-    if riders.last.size == 1
+    if riders.last && riders.last.size == 1
       remainders.push riders.pop
     end
     if walkers.size >= riders.size
