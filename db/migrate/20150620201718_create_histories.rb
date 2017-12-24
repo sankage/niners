@@ -1,4 +1,4 @@
-class CreateHistories < ActiveRecord::Migration
+class CreateHistories < ActiveRecord::Migration[5.1]
   def change
     create_table :histories do |t|
       t.text :serialized_groups
