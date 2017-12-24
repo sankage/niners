@@ -1,3 +1,3 @@
-class History < ActiveRecord::Base
+class History < ApplicationRecord
   serialize :serialized_groups
 end
