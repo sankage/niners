@@ -1,6 +1,7 @@
 h1 Players
 
 - if @players
+  h2 Player Groups
   ul
     li #{@players.size} groups have been made.
     li #{@grouped_players} players have been placed into groups this week.
@@ -40,6 +41,16 @@ h1 Players
       ul
         - @all_players.select { |p| p.type == "Walker/Rider" }.each do |player|
           li = player.name
+    div.column
+      h3 On Standby
+      p Standby players are anyone that signed up after the 72 person cutoff.
+        They are listed in the order of signup. Click "promote" to make them
+        eligible to be placed in a group.
+      ul
+        - @standby_players.each do |player|
+          li
+            = player.name
+            =< link_to "promote", promote_player_path(player), method: :patch
 
 
 - else

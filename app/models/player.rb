@@ -6,6 +6,7 @@ class Player < ApplicationRecord
     where("created_at >= ?", last_tuesday)
   }
   scope :semi_recent, -> { where("created_at >= ?", 12.days.ago) }
+  scope :on_standby, -> { where(on_standby: true).order(:created_at) }
 
   def self.last_tuesday
     today = Time.now
@@ -44,10 +45,10 @@ class Player < ApplicationRecord
   end
 
   def self.patterned_groups
-    walkers = recent.where(walker: true, rider: false).to_a.shuffle.each_slice(2).to_a
-    riders = recent.where(walker: false, rider: true).to_a.shuffle.each_slice(2).to_a
-    either = recent.where(walker: false, rider: false).to_a.shuffle.each_slice(2).to_a
-    either += recent.where(walker: true, rider: true).to_a.shuffle.each_slice(2).to_a
+    walkers = recent.where(walker: true, rider: false, on_standby: false).to_a.shuffle.each_slice(2).to_a
+    riders = recent.where(walker: false, rider: true, on_standby: false).to_a.shuffle.each_slice(2).to_a
+    either = recent.where(walker: false, rider: false, on_standby: false).to_a.shuffle.each_slice(2).to_a
+    either += recent.where(walker: true, rider: true, on_standby: false).to_a.shuffle.each_slice(2).to_a
     remainders = []
     if walkers.last && walkers.last.size == 1
       remainders.push walkers.pop
@@ -85,5 +86,9 @@ class Player < ApplicationRecord
     types.push "Rider" if rider?
     types.push "Walker", "Rider" if !walker? && !rider?
     types.join("/")
+  end
+
+  def promote!
+    update(on_standby: false)
   end
 end

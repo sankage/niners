@@ -1,7 +1,15 @@
 h2 Player Registration
 
-= simple_form_for @player do |f|
-  = f.input :name, label: 'Full Name'
-  = f.input :walker
-  = f.input :rider
-  = f.button :submit, "Register"
+- if @capacity_reached
+  p.flash-alert The maximum number of players has been reached. You can still signup
+    to be on a standby list.
+
+- if @signup_closed
+  p.flash-error Signup is currently closed.
+- else
+  = simple_form_for @player do |f|
+    = f.input :name, label: 'Full Name'
+    = f.input :walker
+    = f.input :rider
+    = f.input :on_standby, as: :hidden
+    = f.button :submit, "Register"
