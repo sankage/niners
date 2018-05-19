@@ -38,7 +38,7 @@ class PlayersController < ApplicationController
     @players = Player.groupings
     @grouped_players = @players.map { |p| p.size }.reduce(0, :+)
     @standby_players = Player.on_standby
-    @all_players = Player.recent - @standby_players
+    @all_players = Player.recent.order(:name) - @standby_players
     @ungrouped_players = @all_players.size - @grouped_players
   end
 
