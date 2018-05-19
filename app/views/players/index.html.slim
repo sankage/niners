@@ -20,5 +20,27 @@ h1 Players
               = link_to "✖", player_path(player), method: :delete, data: { confirm: "Are you sure?" }
 
   = link_to "Re-Group", regroup_players_path, class: "button"
+
+
+  div.all-players
+    h2 Signed up players by type
+
+    div.column
+      h3 Walkers
+      ul
+        - @all_players.select { |p| p.type == "Walker" }.each do |player|
+          li = player.name
+    div.column
+      h3 Riders
+      ul
+        - @all_players.select { |p| p.type == "Rider" }.each do |player|
+          li = player.name
+    div.column
+      h3 Walker/Riders
+      ul
+        - @all_players.select { |p| p.type == "Walker/Rider" }.each do |player|
+          li = player.name
+
+
 - else
   p No players have registered yet.

@@ -22,6 +22,7 @@ class PlayersController < ApplicationController
     @players = Player.groupings
     @grouped_players = @players.map { |p| p.size }.reduce(0, :+)
     @ungrouped_players = Player.recent.count - @grouped_players
+    @all_players = Player.recent
   end
 
   def destroy
