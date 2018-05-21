@@ -12,7 +12,7 @@ class PlayersController < ApplicationController
       if right_now.sunday? && (right_now.hour < 12 || (right_now.hour == 12 && right_now.min < 30))
         closed = false
       end
-      if right_now.monday? && (right_now.hour > 13 || (right_now.hour == 12 && right_now.min >= 30))
+      if right_now.tuesday? && (right_now.hour > 13 || (right_now.hour == 12 && right_now.min >= 30))
         closed = false
       end
     end
