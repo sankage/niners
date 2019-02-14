@@ -1,4 +1,5 @@
 class Player < ApplicationRecord
+  acts_as_paranoid
 
   class GroupError < StandardError; end
 

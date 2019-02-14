@@ -21,11 +21,13 @@ class PlayersController < ApplicationController
   end
 
   def create
-    @player = Player.new(player_params)
-    if Player.recent.pluck(:name).include? @player.name
+    if Player.recent.pluck(:name).include? player_params[:name]
       flash[:notice] = "You have already registered."
       redirect_to root_path
-    elsif @player.save
+      return
+    end
+    @player = Player.with_deleted.where(name: player_params[:name]).first_or_create
+    if @player.update(player_params.merge(created_at: Time.now, deleted_at: nil))
       flash[:success] = "You have been registered."
       redirect_to root_path
     else
