@@ -4,12 +4,11 @@ class PlayersController < ApplicationController
                                only: [:index, :destroy, :regroup, :promote]
 
   def new
-    @capacity_reached = Player.recent.count >= 72
     # Signups are closed from Sunday 12:30 until Tuesday 12:30
     right_now = Time.zone.now
     if right_now.sunday? || right_now.monday? || right_now.tuesday?
       closed = true
-      if right_now.sunday? && (right_now.hour < 12 || (right_now.hour == 12 && right_now.min < 30))
+      if right_now.sunday? && (right_now.hour < 19 || (right_now.hour == 19 && right_now.min < 30))
         closed = false
       end
       if right_now.tuesday? && (right_now.hour > 13 || (right_now.hour == 12 && right_now.min >= 30))
@@ -17,7 +16,7 @@ class PlayersController < ApplicationController
       end
     end
     @signup_closed = closed
-    @player = Player.new(on_standby: @capacity_reached)
+    @player = Player.new(on_standby: false)
   end
 
   def create
