@@ -27,6 +27,11 @@ h1 Players
     h2 Signed up players by type
 
     div.column
+      h3 All players by last name
+      ul
+        - @all_players.sort_by { |p| p.name.split.last }.each do |player|
+          li = player.name
+    div.column
       h3 Walkers
       ul
         - @all_players.select { |p| p.type == "Walker" }.each do |player|
