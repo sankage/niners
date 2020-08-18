@@ -29,7 +29,7 @@ h1 Players
     div.column
       h3 All players by last name
       ul
-        - @all_players.sort_by { |p| p.name.split.last }.each do |player|
+        - @all_players.sort_by { |p| p.name.split.last.upcase }.each do |player|
           li = player.name
     div.column
       h3 Walkers
