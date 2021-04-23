@@ -64,6 +64,6 @@ class PlayersController < ApplicationController
   private
 
   def player_params
-    params.require(:player).permit(:name, :walker, :rider, :on_standby)
+    params.require(:player).permit(:name, :walker, :rider, :on_standby, :buffet)
   end
 end

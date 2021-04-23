@@ -26,11 +26,21 @@ h1 Players
   div.all-players
     h2 Signed up players by type
 
-    div.column
+    div.full
       h3 All players by last name
-      ul
-        - @all_players.sort_by { |p| p.name.split.last.upcase }.each do |player|
-          li = player.name
+      table
+        thead
+          tr
+            th Name
+            th Walker/Rider
+            th Buffet
+        tbody
+          - @all_players.sort_by { |p| p.name.split.last.upcase }.each do |player|
+            tr
+              td = player.name
+              td = player.type
+              td = player.buffet ? "Yes" : ""
+
     div.column
       h3 Walkers
       ul
