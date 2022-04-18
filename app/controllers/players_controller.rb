@@ -8,7 +8,7 @@ class PlayersController < ApplicationController
     right_now = Time.zone.now
     if right_now.sunday? || right_now.monday? || right_now.tuesday?
       closed = true
-      if right_now.sunday? && (right_now.hour < 19 || (right_now.hour == 19 && right_now.min < 30))
+      if right_now.sunday? && (right_now.hour < 20)
         closed = false
       end
       if right_now.tuesday? && (right_now.hour > 13 || (right_now.hour == 12 && right_now.min >= 30))
