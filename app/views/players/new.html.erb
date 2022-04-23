@@ -1,0 +1,18 @@
+<div class="panel w-80">
+  <div class="content">
+    <h2>Player Registration</h2>
+
+    <% if @signup_closed %>
+      <p class="flash-error">Signup is currently closed.</p>
+    <% else %>
+      <%= simple_form_for @player do |f| %>
+        <%= f.input :name, label: 'Full Name' %>
+        <%= f.input :walker %>
+        <%= f.input :rider %>
+        <%= f.input :buffet %>
+        <%= f.input :on_standby, as: :hidden %>
+        <%= f.button :submit, "Register" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

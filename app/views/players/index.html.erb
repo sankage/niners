@@ -1,0 +1,110 @@
+<div class="panel">
+  <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+    <h1 class="text-lg leading-6 font-medium text-gray-900">Players</h1>
+  </div>
+  <div class="content">
+    <% if @players.empty? %>
+      <p>No players have registered yet.</p>
+    <% else %>
+      <h2 class="text-lg font-medium text-gray-900">Player Groups</h2>
+      <%= turbo_frame_tag "player_groups" do %>
+        <ul>
+          <li><%= @players.size %> groups have been made.</li>
+          <li><%= @grouped_players %> players have been placed into groups this week.</li>
+          <% if @ungrouped_players > 0 %>
+            <li class="bg-orange-200 px-3 py-2"><%= @ungrouped_players %> players have not been put into groups. Hit
+            the Re-Group button for them to be added.</li>
+          <% end %>
+        </ul>
+        <ol class="flex flex-wrap">
+          <% @players.each_with_index do |group, index| %>
+            <li class="inline-block m-4">
+              <h2 class="border-b">Group #<%= index+1 %></h2>
+              <ul>
+                <% group.each do |player| %>
+                  <li class="flex justify-between hover:bg-indigo-100 px-2 py-1 text-gray-500">
+                    <%= "#{player.name}—#{player.type}" %>
+                    &nbsp;
+                    <%= button_to "✖", player_path(player),
+                          method: :delete,
+                          form: {
+                            data: {
+                              confirm: "Are you sure?"
+                            }
+                          } %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ol>
+        <%= link_to "Re-Group", regroup_players_path, class: "button" %>
+      
+        <div class="flex flex-wrap mt-5">
+          <h2 class="basis-full text-lg font-medium text-gray-900">Signed up players by type</h2>
+
+          <div class="basis-full">
+            <h3>All players by last name</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Walker/Rider</th>
+                  <th>Buffet</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @all_players.sort_by { |p| p.name.split.last.upcase }.each do |player| %>
+                  <tr>
+                    <td><%= player.name %></td>
+                    <td><%= player.type %></td>
+                    <td><%= player.buffet ? "Yes" : "" %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="basis-1/4 mt-5">
+            <h3 class="font-medium text-gray-900">Walkers</h3>
+            <ul>
+              <% @all_players.select { |p| p.type == "Walker" }.each do |player| %>
+                <li class="text-gray-500"><%= player.name %>
+              <% end %>
+            </ul>
+          </div>
+          <div class="basis-1/4 mt-5">
+            <h3 class="font-medium text-gray-900">Riders</h3>
+            <ul>
+              <% @all_players.select { |p| p.type == "Rider" }.each do |player| %>
+                <li class="text-gray-500"><%= player.name %></li>
+              <% end %>
+            </ul>
+          </div>
+          <div class="basis-1/4 mt-5">
+            <h3 class="font-medium text-gray-900">Walker/Riders</h3>
+            <ul>
+              <% @all_players.select { |p| p.type == "Walker/Rider" }.each do |player| %>
+                <li class="text-gray-500"><%= player.name %></li>
+              <% end %>
+            </ul>
+          </div>
+          <div class="basis-1/4 mt-5">
+            <h3 class="font-medium text-gray-900">On Standby</h3>
+            <p>Standby players are anyone that signed up after the 72 person cutoff.
+              They are listed in the order of signup. Click "promote" to make them
+              eligible to be placed in a group.</p>
+            <ul>
+              <% @standby_players.each do |player| %>
+                <li class="text-gray-500">
+                  <%= player.name %>
+                  <%= link_to "promote", promote_player_path(player), data: { turbo_method: :patch } %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
