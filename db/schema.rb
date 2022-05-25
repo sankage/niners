@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2021_04_23_020911) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_23_001106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_04_23_020911) do
     t.boolean "on_standby", default: false
     t.datetime "deleted_at", precision: nil
     t.boolean "buffet"
+    t.integer "lunch_special"
     t.index ["deleted_at"], name: "index_players_on_deleted_at"
   end
 

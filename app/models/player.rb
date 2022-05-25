@@ -1,5 +1,13 @@
 class Player < ApplicationRecord
   acts_as_paranoid
+  enum :lunch_special, {
+    none: 0,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5
+  }, prefix: :lunch_specials, default: :none
 
   class GroupError < StandardError; end
 

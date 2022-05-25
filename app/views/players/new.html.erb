@@ -9,7 +9,9 @@
         <%= f.input :name, label: 'Full Name' %>
         <%= f.input :walker %>
         <%= f.input :rider %>
-        <%= f.input :buffet, label: "Lunch special" %>
+        <%= f.input :lunch_special,
+              collection: Player.lunch_specials.keys[1..-1].push(:none),
+              as: :radio_buttons %>
         <%= f.input :on_standby, as: :hidden %>
         <%= f.button :submit, "Register" %>
       <% end %>

@@ -65,3 +65,10 @@ table tbody {
 table tbody td {
   @apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
 }
+
+.input.radio_buttons span.radio {
+  @apply inline-block mr-2;
+}
+.input.radio_buttons span.radio input {
+  @apply mr-1;
+}

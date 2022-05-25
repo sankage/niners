@@ -6,15 +6,16 @@ class PlayersController < ApplicationController
   def new
     # Signups are closed from Sunday 15:00 (3pm) until Tuesday 12:30
     right_now = Time.zone.now
-    if right_now.sunday? || right_now.monday? || right_now.tuesday?
-      closed = true
-      if right_now.sunday? && (right_now.hour < 15)
-        closed = false
-      end
-      if right_now.tuesday? && (right_now.hour > 13 || (right_now.hour == 12 && right_now.min >= 30))
-        closed = false
-      end
-    end
+    closed = false
+    # if right_now.sunday? || right_now.monday? || right_now.tuesday?
+    #   closed = true
+    #   if right_now.sunday? && (right_now.hour < 15)
+    #     closed = false
+    #   end
+    #   if right_now.tuesday? && (right_now.hour > 13 || (right_now.hour == 12 && right_now.min >= 30))
+    #     closed = false
+    #   end
+    # end
     @signup_closed = closed
     @player = Player.new(on_standby: false)
   end
@@ -31,7 +32,7 @@ class PlayersController < ApplicationController
       redirect_to root_path
     else
       flash[:error] = "You were not registered."
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -64,6 +65,6 @@ class PlayersController < ApplicationController
   private
 
   def player_params
-    params.require(:player).permit(:name, :walker, :rider, :on_standby, :buffet)
+    params.require(:player).permit(:name, :walker, :rider, :on_standby, :lunch_special)
   end
 end
