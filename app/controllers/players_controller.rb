@@ -4,12 +4,12 @@ class PlayersController < ApplicationController
                                only: [:index, :destroy, :regroup, :promote]
 
   def new
-    # Signups are closed from Sunday 18:05 (6pm) until Wednesday
+    # Signups are closed from Sunday 17:00 (5pm) until Wednesday
     right_now = Time.zone.now
     closed = false
     if right_now.sunday? || right_now.monday? || right_now.tuesday?
       closed = true
-      if right_now.sunday? && (right_now.hour < 18)
+      if right_now.sunday? && (right_now.hour < 17)
         closed = false
       end
     end
